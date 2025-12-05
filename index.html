@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitLog - Fitness Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-dumbbell"></i>
+                <span>FitLog</span>
+            </div>
+            
+            <div class="nav-menu">
+                <a href="#home" class="nav-link active" data-page="home">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="#library" class="nav-link" data-page="library">
+                    <i class="fas fa-book"></i> Exercise Library
+                </a>
+                <a href="#history" class="nav-link" data-page="history">
+                    <i class="fas fa-chart-line"></i> Progress
+                </a>
+                <a href="#routines" class="nav-link" data-page="routines">
+                    <i class="fas fa-clipboard-list"></i> Routines
+                </a>
+            </div>
+            
+            <div class="nav-auth">
+                <button id="loginBtn" class="btn btn-login">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+                <button id="logoutBtn" class="btn btn-logout" style="display: none;">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+                <div id="userInfo" class="user-info" style="display: none;">
+                    <i class="fas fa-user"></i>
+                    <span id="username">User</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Login to FitLog</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+                <p class="modal-text">Demo: Use any email/password</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Home Screen -->
+        <section id="home" class="page active">
+            <div class="page-header">
+                <h1>Today's Workout</h1>
+                <button id="addExerciseBtn" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Add Exercise
+                </button>
+            </div>
+            
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Workout Time</h3>
+                    <p id="totalTime">0 min</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-weight-hanging"></i>
+                    </div>
+                    <h3>Total Volume</h3>
+                    <p id="totalVolume">0 kg</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <h3>Calories Burned</h3>
+                    <p id="totalCalories">0 kcal</p>
+                </div>
+            </div>
+            
+            <div class="workout-list">
+                <h2>Exercises Logged Today</h2>
+                <div id="todayExercises">
+                    <!-- Exercises will be added here dynamically -->
+                    <p class="empty-state">No exercises logged today. Click "Add Exercise" to start!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Exercise Library -->
+        <section id="library" class="page">
+            <div class="page-header">
+                <h1>Exercise Library</h1>
+                <div class="filters">
+                    <select id="categoryFilter" class="filter-select">
+                        <option value="all">All Categories</option>
+                        <option value="strength">Strength</option>
+                        <option value="cardio">Cardio</option>
+                        <option value="flexibility">Flexibility</option>
+                    </select>
+                    <select id="muscleFilter" class="filter-select">
+                        <option value="all">All Muscle Groups</option>
+                        <option value="chest">Chest</option>
+                        <option value="back">Back</option>
+                        <option value="legs">Legs</option>
+                        <option value="shoulders">Shoulders</option>
+                        <option value="arms">Arms</option>
+                        <option value="core">Core</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="exercise-grid" id="exerciseGrid">
+                <!-- Exercises will be loaded from exercises.js -->
+            </div>
+        </section>
+
+        <!-- Progress History -->
+        <section id="history" class="page">
+            <div class="page-header">
+                <h1>Progress & History</h1>
+                <div class="date-filter">
+                    <select id="timeFilter" class="filter-select">
+                        <option value="7">Last 7 Days</option>
+                        <option value="30">Last 30 Days</option>
+                        <option value="90">Last 90 Days</option>
+                        <option value="all">All Time</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="chart-container">
+                    <h2>Workout Frequency</h2>
+                    <div class="chart-placeholder" id="frequencyChart">
+                        <!-- Chart will be generated here -->
+                        <canvas id="workoutChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="calendar-container">
+                    <h2>Workout Calendar</h2>
+                    <div id="calendar">
+                        <!-- Calendar will be generated here -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="recent-workouts">
+                <h2>Recent Workouts</h2>
+                <div id="recentWorkoutsList">
+                    <!-- Recent workouts will be listed here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Routines -->
+<section id="routines" class="page">
+    <div class="page-header">
+        <h1>My Routines</h1>
+        <button id="createRoutineBtn" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Create Routine
+        </button>
+    </div>
+    
+    <div class="routines-list" id="routinesList">
+        <!-- Routines will be loaded dynamically -->
+        <div class="empty-state" id="noRoutinesMessage">
+            <i class="fas fa-clipboard-list" style="font-size: 3rem; margin-bottom: 1rem; color: #ddd;"></i>
+            <p>No routines created yet.</p>
+            <p>Create your first routine to save and reuse workouts!</p>
+        </div>
+    </div>
+</section>
+
+<!-- Create Routine Modal -->
+<div id="routineModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2 id="routineModalTitle">Create New Routine</h2>
+        <form id="routineForm">
+            <div class="form-group">
+                <label for="routineName">Routine Name</label>
+                <input type="text" id="routineName" placeholder="e.g., Monday Upper Body" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="routineDescription">Description (Optional)</label>
+                <textarea id="routineDescription" placeholder="Describe this routine..." rows="3"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Add Exercises</label>
+                <div class="exercise-selection">
+                    <select id="routineExerciseSelect" class="filter-select" style="width: 100%;">
+                        <option value="">Select an exercise</option>
+                    </select>
+                    <div class="form-row" style="margin-top: 0.5rem;">
+                        <div class="form-group">
+                            <label for="routineSets">Sets</label>
+                            <input type="number" id="routineSets" min="1" max="20" value="3">
+                        </div>
+                        <div class="form-group">
+                            <label for="routineReps">Reps</label>
+                            <input type="number" id="routineReps" min="1" max="100" value="10">
+                        </div>
+                        <div class="form-group">
+                            <label for="routineWeight">Weight (kg)</label>
+                            <input type="number" id="routineWeight" min="0" step="0.5" value="20">
+                        </div>
+                    </div>
+                    <button type="button" id="addToRoutineBtn" class="btn btn-small" style="margin-top: 0.5rem; width: 100%;">
+                        <i class="fas fa-plus"></i> Add to Routine
+                    </button>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <h3 style="margin-bottom: 1rem;">Exercises in Routine</h3>
+                <div id="routineExercisesList" class="routine-exercises-list">
+                    <!-- Exercises will be added here -->
+                    <p class="empty-state-small">No exercises added yet</p>
+                </div>
+            </div>
+            
+            <div class="form-buttons">
+                <button type="submit" class="btn btn-primary">Save Routine</button>
+                <button type="button" id="cancelRoutineBtn" class="btn btn-secondary">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Use Routine Modal -->
+<div id="useRoutineModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>Use Routine</h2>
+        <div id="useRoutineContent">
+            <!-- Routine details will be loaded here -->
+        </div>
+        <div class="form-buttons" style="margin-top: 1.5rem;">
+            <button type="button" id="startRoutineBtn" class="btn btn-primary">
+                <i class="fas fa-play"></i> Start Workout
+            </button>
+            <button type="button" id="cancelUseRoutineBtn" class="btn btn-secondary">Cancel</button>
+        </div>
+    </div>
+</div>
+
+    <!-- Add Exercise Modal -->
+    <div id="exerciseModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Log Exercise</h2>
+            <form id="exerciseForm">
+                <div class="form-group">
+                    <label for="exerciseSelect">Exercise</label>
+                    <select id="exerciseSelect" required>
+                        <!-- Options will be populated from exercises.js -->
+                    </select>
+                </div>
+                
+                <div id="strengthFields" class="exercise-fields">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="sets">Sets</label>
+                            <input type="number" id="sets" min="1" max="20" value="3">
+                        </div>
+                        <div class="form-group">
+                            <label for="reps">Reps</label>
+                            <input type="number" id="reps" min="1" max="100" value="10">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="weight">Weight (kg)</label>
+                        <input type="number" id="weight" min="0" step="0.5" value="20">
+                    </div>
+                </div>
+                
+                <div id="cardioFields" class="exercise-fields" style="display: none;">
+                    <div class="form-group">
+                        <label for="duration">Duration (minutes)</label>
+                        <input type="number" id="duration" min="1" value="30">
+                    </div>
+                    <div class="form-group">
+                        <label for="distance">Distance (km)</label>
+                        <input type="number" id="distance" min="0" step="0.1" value="5">
+                    </div>
+                </div>
+                
+                <div id="flexibilityFields" class="exercise-fields" style="display: none;">
+                    <div class="form-group">
+                        <label for="flexDuration">Duration (minutes)</label>
+                        <input type="number" id="flexDuration" min="1" value="10">
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Add to Workout</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="exercises.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
